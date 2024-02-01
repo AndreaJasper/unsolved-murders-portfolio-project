@@ -2,38 +2,29 @@
 import json
 import csv
 
-filename = "homicide_report.csv"
+data_set = "homicide_report.csv"
 
-perp_age = []
-victim_sex = []
-state_deaths = []
-city_deaths = []
-years = []
+data_file = []
 
-with open(filename, newline='') as data:
-  # for line in csv.DictReader(data):
-  #   print(line)
-
+with open(data_set, newline='') as data:
   data_reader = csv.DictReader(data)
+  for row in data_reader:
+    data_file.append(row)
 
-  for data_row in data_reader:
-    perp_age.append(data_row['Perpetrator Age'])
-    victim_sex.append(data_row['Victim Sex'])
-    state_deaths.append(data_row['State'])
-    city_deaths.append(data_row['City'])
-    years.append(data_row['Year'])
+# with open(data_set, newline='') as data:
+#   reader = csv.reader(data, delimiter=' ')
+#   for row in reader:
+#     data_file.append(', '.join(row))
 
+print(data_file[2])
 
 # how many male v female victims
 
 # how many male v female v unknown perpetrators
 
 # average perpetrator age
-def average_age(age):
-  return sum(age)/len(age)
 
-average = average_age(perp_age)
-print("Average age of perpetrator is " + round(average))
+# print("Average age of perpetrator is " + round(average))
 
 # state with the most murders
 
