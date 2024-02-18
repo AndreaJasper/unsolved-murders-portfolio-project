@@ -1,83 +1,70 @@
+import pandas as pd
 
-import math
-import csv
+df = pd.read_csv("homicide_report.csv")
 
-data_set = "homicide_report.csv"
+# Convert the 'Perpetrator Age' column to numeric, coercing errors to NaN for non-numeric values
+df['Perpetrator Age'] = pd.to_numeric(df['Perpetrator Age'], errors='coerce')
 
-perp_age_list = []
-state = []
-city = []
-year_list = []
-solved = []
-victim_count = []
+# Calculate the average perpetrator's age, excluding NaN values
+average_age = int(df['Perpetrator Age'].mean())
 
-with open(data_set, newline='') as data:
-  data_reader = csv.DictReader(data)
-  for row in data_reader:
-    perp_age_list.append(row['Perpetrator Age'])
-    state.append(row['State'])
-    city.append(row['City'])
-    year_list.append(row['Year'])
-    solved.append(row['Crime Solved'])
-    victim_count.append(row['Victim Count'])
+print("Average Perpetrator's Age:", average_age)
 
+# Group the DataFrame by the 'State' column and count the occurrences of each state
+murders_per_state = df['State'].value_counts()
 
-# locates any age fields that are empty
-for i, num in enumerate(perp_age_list):
-    if not num.isdigit():
-        print(i, num)
+# Get the state with the most murders
+state_with_most_murders = murders_per_state.idxmax()
+most_murders_count = murders_per_state.max()
 
-# changes perpetrator age fromstring to int
-perp_age = []
-for num in perp_age_list:
-  num_int = int(num)
-  perp_age_int = num_int
-  perp_age.append(perp_age_int)
+# Get the state with the least murders
+state_with_least_murders = murders_per_state.idxmin()
+least_murders_count = murders_per_state.min()
 
-# sum of perpetrators ages
-avg_perp_age = 0
-for age in perp_age:
-  avg_perp_age += age
+print("State with the most murders:", state_with_most_murders)
+print("Number of murders in that state:", most_murders_count)
 
-#average perpetrator age
-average_perp_age = avg_perp_age/len(perp_age)
-print("Average age of perpetrator is " + str(math.floor(average_perp_age)))
+print("\nState with the least murders:", state_with_least_murders)
+print("Number of murders in that state:", least_murders_count)
 
-# state with the most murders
+# solved per state
+solved_per_state = df.groupby('State')['Crime Solved'].apply(lambda x: (x == 'Yes').sum()).reset_index()
+print(solved_per_state)
 
-# solved v unsolved
+#solved v unsolved
+# Count the occurrences of solved and unsolved crimes
+solved_vs_unsolved = df['Crime Solved'].value_counts()
 
-# state with the most
-# print(victim_count)
-# print(state)
+# Get the count of solved and unsolved crimes
+solved_count = solved_vs_unsolved['Yes']
+unsolved_count = solved_vs_unsolved['No']
 
-def create_dictionary(perp_age_list, state, city, year_list, solved, victim_count):
-  crimes = dict()
-  num_crimes = len(perp_age_list)
-  for i in range(num_crimes):
-    crimes[perp_age_list[i]] : {'Perpetrator Age': perp_age_list[i],
-                                'State': state[i],
-                                'City': city[i],
-                                'Year': year_list[i],
-                                'Crime Solved': solved[i],
-                                'Victim Count': victim_count[i]
-                                }
-  return crimes
-
-crimes = create_dictionary(perp_age_list, state, city, year_list, solved, victim_count)
-print(crimes)
-
-# for row in zipped_state:
-
-
-# victim_to_state = {key: value for key, value in zipped_state}
-# print("Victims per sate are: " + str(victim_to_state))
-
-
-# state with the least
-
-# city with the most
-
-# city with the least
+print("Number of solved crimes:", solved_count)
+print("Number of unsolved crimes:", unsolved_count)
 
 # difference in total deaths from 1980 and 2014
+# Filter the DataFrame to include data from 1980 to 2014
+filtered_df = df[(df['Year'] >= 1980) & (df['Year'] <= 2014)]
+
+# Group the filtered DataFrame by the 'Year' column and count the number of murders per year
+murders_per_year = filtered_df['Year'].value_counts().sort_index()
+
+# Calculate the murder rates for each year
+murder_rates = murders_per_year.diff().fillna(murders_per_year.iloc[0]) / murders_per_year.iloc[0] * 100
+
+# Calculate the percentage change in murder rates from 1980 to 2014
+decline_percentage = murder_rates.iloc[-1] - murder_rates.iloc[0]
+
+print("Murder rates have declined by approximately {:.2f}% from 1980 to 2014.".format(decline_percentage))
+
+# which gender is more likely to commit a crime?
+# Count the number of crimes committed by perpetrators of each sex
+crimes_by_sex = df['Perpetrator Sex'].value_counts()
+
+# Determine which sex is more likely to commit murder
+more_likely_sex = crimes_by_sex.idxmax()
+
+print("Number of crimes committed by perpetrators of each sex:")
+print(crimes_by_sex)
+
+print("\n{} is more likely to commit murder.".format(more_likely_sex))
