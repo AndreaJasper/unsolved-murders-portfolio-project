@@ -2,6 +2,7 @@ import pandas as pd
 
 df = pd.read_csv("homicide_report.csv")
 
+# average age of perpetrator
 # Convert the 'Perpetrator Age' column to numeric, coercing errors to NaN for non-numeric values
 df['Perpetrator Age'] = pd.to_numeric(df['Perpetrator Age'], errors='coerce')
 
@@ -10,22 +11,23 @@ average_age = int(df['Perpetrator Age'].mean())
 
 print("Average Perpetrator's Age:", average_age)
 
-# Group the DataFrame by the 'State' column and count the occurrences of each state
-murders_per_state = df['State'].value_counts()
+# states with most and least homicides
+# Group the DataFrame by the 'State' column and sum up the victim counts for each state
+victim_counts_per_state = df.groupby('State')['Victim Count'].sum()
 
-# Get the state with the most murders
-state_with_most_murders = murders_per_state.idxmax()
-most_murders_count = murders_per_state.max()
+# Get the state with the most murders (highest victim count)
+state_with_most_murders = victim_counts_per_state.idxmax()
+most_murders_count = victim_counts_per_state.max()
 
-# Get the state with the least murders
-state_with_least_murders = murders_per_state.idxmin()
-least_murders_count = murders_per_state.min()
+# Get the state with the least murders (lowest victim count)
+state_with_least_murders = victim_counts_per_state.idxmin()
+least_murders_count = victim_counts_per_state.min()
 
-print("State with the most murders:", state_with_most_murders)
-print("Number of murders in that state:", most_murders_count)
+print("State with the most murders (by victim count):", state_with_most_murders)
+print("Total victims in that state:", most_murders_count)
 
-print("\nState with the least murders:", state_with_least_murders)
-print("Number of murders in that state:", least_murders_count)
+print("\nState with the least murders (by victim count):", state_with_least_murders)
+print("Total victims in that state:", least_murders_count)
 
 # solved per state
 solved_per_state = df.groupby('State')['Crime Solved'].apply(lambda x: (x == 'Yes').sum()).reset_index()
