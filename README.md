@@ -1,13 +1,26 @@
-# unsolved-murders-portfolio-project
+# 2023 Reading Analysis
+![alt text](image.jpg)
 
-Portfolio project that analyzes known homicide in the US from 1980 - 2014 and strives to answer the following questions:
-1. Number of solved to unsolved homicides.
-2. State wide solve rates.
-3. Which gender is most likely to offend.
-4. Have homicide rates dropped from 1980 to 2014
+## Overview
+Brief overview of the project.
 
-## Dataset
-Dataset was acquire through [Kaggle](https://www.kaggle.com/datasets/murderaccountability/homicide-reports).
+### Data Source
+Where was the data sourced from?
 
-### Biases
-There are large chunks of data that are 'unknown' meaning it wasn't present in the dataset. This skews my finds a bit as it's not 100% accurate on all accounts.
+## Languages and Programs Used
+- Python
+- Pandas
+- MatPlotLib
+- Tableau
+- Excel
+
+### Questions Asked
+
+### Findings
+
+### Techniques
+- **Column Type Conversion:**
+- **Data Cleaning:** The data was meticulously cleaned, replacing empty fields with zeros for numeric values and NaN for non-numeric values.
+- **Feature Engineering:** replace text
+- **Agregation and Grouping:** replace text
+- **Visualization Preparation:** replace text

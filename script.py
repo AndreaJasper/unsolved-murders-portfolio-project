@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 df = pd.read_csv("homicide_report.csv")
 
@@ -38,11 +39,11 @@ print(solved_per_state)
 solved_vs_unsolved = df['Crime Solved'].value_counts()
 
 # Get the count of solved and unsolved crimes
-solved_count = solved_vs_unsolved['Yes']
-unsolved_count = solved_vs_unsolved['No']
+solved_count = (solved_vs_unsolved['Yes']/ df.shape[0]).round(2) * 100
+unsolved_count = (solved_vs_unsolved['No']/ df.shape[0]).round(2) * 100
 
-print("Number of solved crimes:", solved_count)
-print("Number of unsolved crimes:", unsolved_count)
+print("Percent of solved crimes:", solved_count)
+print("Percent of unsolved crimes:", unsolved_count)
 
 # difference in total deaths from 1980 and 2014
 # Filter the DataFrame to include data from 1980 to 2014
